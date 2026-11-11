@@ -1,0 +1,253 @@
+@import 'tailwindcss';
+
+/* ──────────────────────────────────────────────────────────────
+   Ranobe Giveaway Booster v3: "mở một gói thẻ bài"
+   Ngôn ngữ thị giác: sticker pop (viền mực dày, bóng cứng) + thẻ hologram.
+   Token nằm trong @theme, mọi thứ còn lại là utility của Tailwind.
+   ────────────────────────────────────────────────────────────── */
+
+@theme {
+  --color-ink: #15131f;
+  --color-paper: #fbf7ff;
+  --color-cream: #fff4d6;
+  --color-aqua: #2fd8ff;
+  --color-bubble: #ff5cae;
+  --color-sun: #ffd93b;
+  --color-grape: #7c5cff;
+  --color-lilac: #d9ccff;
+  --color-tang: #ff8a3b;
+  --color-zest: #b9f34a;
+  --color-night: #1b1436;
+  --color-ok: #18b46b;
+  --color-bad: #ff4545;
+
+  --font-display: 'Unbounded Variable', 'Unbounded', 'Be Vietnam Pro', system-ui, sans-serif;
+  --font-sans: 'Be Vietnam Pro', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono Variable', ui-monospace, Consolas, monospace;
+  --font-jp: 'Dela Gothic One', 'Yu Gothic', sans-serif;
+
+  --shadow-hard: 7px 7px 0 var(--color-ink);
+  --shadow-hard-sm: 4px 4px 0 var(--color-ink);
+  --shadow-hard-lg: 12px 12px 0 var(--color-ink);
+
+  --ease-pop: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
+
+  --animate-marquee: marquee 38s linear infinite;
+  --animate-marquee-rev: marquee 46s linear infinite reverse;
+  --animate-spin-slow: spin 26s linear infinite;
+  --animate-wobble: wobble 3.6s ease-in-out infinite;
+  --animate-float: float 5s ease-in-out infinite;
+  --animate-shake: shake 0.9s ease-in-out infinite;
+  --animate-foil: foil 9s linear infinite alternate;
+  --animate-digit: digit 0.55s var(--ease-pop);
+  --animate-bob: bob 1.6s ease-in-out infinite;
+
+  @keyframes marquee {
+    to {
+      transform: translateX(-50%);
+    }
+  }
+  @keyframes wobble {
+    0%,
+    100% {
+      rotate: -5deg;
+    }
+    50% {
+      rotate: 5deg;
+    }
+  }
+  @keyframes float {
+    0%,
+    100% {
+      translate: 0 0;
+    }
+    50% {
+      translate: 0 -14px;
+    }
+  }
+  @keyframes shake {
+    0%,
+    100% {
+      transform: rotate(-4deg) translateY(0);
+    }
+    25% {
+      transform: rotate(5deg) translateY(-6px);
+    }
+    50% {
+      transform: rotate(-6deg) translateY(0);
+    }
+    75% {
+      transform: rotate(4deg) translateY(-3px);
+    }
+  }
+  @keyframes foil {
+    from {
+      background-position: 0% 0%;
+    }
+    to {
+      background-position: 100% 100%;
+    }
+  }
+  @keyframes digit {
+    from {
+      transform: translateY(-70%) scale(0.8);
+      opacity: 0;
+    }
+    to {
+      transform: none;
+      opacity: 1;
+    }
+  }
+  @keyframes bob {
+    0%,
+    100% {
+      translate: 0 0;
+    }
+    50% {
+      translate: 0 7px;
+    }
+  }
+}
+
+@layer base {
+  html {
+    /* chữ lớn dần theo màn hình: ~16px ở 1440 → 20px ở 2560 */
+    font-size: clamp(15px, 0.34vw + 11px, 21px);
+    background: var(--color-ink);
+    scrollbar-color: var(--color-bubble) var(--color-ink);
+    scrollbar-width: thin;
+  }
+  body {
+    background: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow-x: clip;
+  }
+  ::selection {
+    background: var(--color-ink);
+    color: var(--color-sun);
+  }
+  :focus-visible {
+    outline: 3px solid var(--color-grape);
+    outline-offset: 4px;
+  }
+  button {
+    cursor: pointer;
+  }
+
+  /* Lenis */
+  html.lenis,
+  html.lenis body {
+    height: auto;
+  }
+  .lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+  }
+  .lenis.lenis-stopped {
+    overflow: clip;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+    }
+  }
+}
+
+/* ── utility riêng của dự án ── */
+
+/* viền mực quanh chữ, tô bên trong */
+@utility text-stroke {
+  -webkit-text-stroke: 0.06em var(--color-ink);
+  paint-order: stroke fill;
+}
+@utility text-stroke-thin {
+  -webkit-text-stroke: 2px var(--color-ink);
+  paint-order: stroke fill;
+}
+
+/* nền chấm halftone, đổi màu chấm bằng --dot */
+@utility bg-dots {
+  background-image: radial-gradient(var(--dot, rgba(21, 19, 31, 0.13)) 2px, transparent 2.6px);
+  background-size: 22px 22px;
+}
+
+/* ảnh cắt nền thành sticker: viền trắng + bóng cứng */
+@utility sticker {
+  filter: drop-shadow(3px 0 0 #fff) drop-shadow(-3px 0 0 #fff) drop-shadow(0 3px 0 #fff) drop-shadow(0 -3px 0 #fff)
+    drop-shadow(5px 6px 0 rgba(21, 19, 31, 0.9));
+}
+
+/* mặt lưng lá bài */
+@utility card-back {
+  background:
+    radial-gradient(circle at 50% 50%, var(--color-sun) 0 9%, transparent 9.5%),
+    repeating-radial-gradient(circle at 50% 50%, #2a1870 0 10px, var(--color-grape) 10px 20px);
+}
+
+/* 3D */
+@utility preserve-3d {
+  transform-style: preserve-3d;
+}
+@utility backface-hidden {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/* ── thẻ hologram: xem components/ui/holo-card.tsx ──
+   --mx/--my: vị trí con trỏ (%), --rx/--ry: góc nghiêng, --on: 0..1 khi đang hover */
+@utility holo-tilt {
+  transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+  transition: transform 0.5s var(--ease-expo);
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+@utility holo-shine {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  border-radius: inherit;
+  pointer-events: none;
+  background-image: repeating-linear-gradient(
+    115deg,
+    #ff5cae 0%,
+    #ffd93b 9%,
+    #6dff9b 18%,
+    #2fd8ff 27%,
+    #7c5cff 36%,
+    #ff5cae 45%
+  );
+  background-size: 260% 260%;
+  background-position: var(--mx, 50%) var(--my, 50%);
+  mix-blend-mode: color-dodge;
+  filter: brightness(0.72) contrast(1.35) saturate(1.25);
+  opacity: calc(0.2 + var(--on, 0) * 0.5);
+  transition: opacity 0.4s;
+}
+/* khi không ai chạm, lớp ánh kim tự trôi */
+@utility holo-idle {
+  animation: var(--animate-foil);
+}
+@utility holo-glare {
+  position: absolute;
+  inset: 0;
+  z-index: 21;
+  border-radius: inherit;
+  pointer-events: none;
+  background: radial-gradient(
+    farthest-corner circle at var(--mx, 50%) var(--my, 50%),
+    rgba(255, 255, 255, 0.85) 4%,
+    rgba(255, 255, 255, 0.22) 26%,
+    transparent 62%
+  );
+  mix-blend-mode: overlay;
+  opacity: var(--on, 0);
+  transition: opacity 0.4s;
+}
