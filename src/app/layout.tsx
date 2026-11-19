@@ -12,21 +12,47 @@ import './globals.css'
 
 import { SmoothScroll } from '@/components/layout/smooth-scroll'
 
+const SITE_URL = 'https://ga.ranobe.vn'
+const SITE_NAME = 'Ranobe Giveaway Booster'
+const title = `${SITE_NAME} | Cuộc thi trắc nghiệm Light Novel có thưởng`
 const description =
-  'Đây là cuộc thi trắc nghiệm Light Novel có thưởng được thiết kế để kiểm tra khả năng hiểu và ghi nhớ các yếu tố văn học của Light Novel!'
+  'Cuộc thi trắc nghiệm Light Novel có thưởng của TheMeoki × NaviRanobe: 20 câu hỏi, 60 phút, 3 giải thưởng. Thử sức với kiến thức về tác phẩm, tác giả, nhà xuất bản và giải thưởng Light Novel!'
 const GA_ID = 'G-ZLCE7RSD0S'
 
 export const metadata: Metadata = {
-  title: 'Ranobe Giveaway Booster | Cuộc thi trắc nghiệm Light Novel',
+  metadataBase: new URL(SITE_URL),
+  title,
   description,
-  keywords: ['light novel', 'giveaway', 'light novel giveaway booster'],
+  applicationName: SITE_NAME,
+  keywords: [
+    'ranobe giveaway booster',
+    'light novel',
+    'ranobe',
+    'giveaway',
+    'trắc nghiệm light novel',
+    'cuộc thi light novel',
+    'TheMeoki',
+    'NaviRanobe',
+  ],
+  authors: [
+    { name: 'TheMeoki', url: 'https://facebook.com/TheMeoki' },
+    { name: 'NaviRanobe', url: 'https://facebook.com/NaviRanobe' },
+  ],
+  alternates: { canonical: '/' },
   openGraph: {
     type: 'website',
-    title: 'Light Novel Giveaway Booster',
+    url: '/',
+    siteName: SITE_NAME,
+    locale: 'vi_VN',
+    title,
     description,
-    images: ['/meta.jpg'],
   },
-  twitter: { card: 'summary_large_image' },
+  // ảnh og/twitter lấy tự động từ app/opengraph-image.jpg
+  twitter: {
+    card: 'summary_large_image',
+    title,
+    description,
+  },
 }
 
 export const viewport: Viewport = {
